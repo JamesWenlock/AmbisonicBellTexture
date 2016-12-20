@@ -14,10 +14,24 @@ The Ambisonic FM Bell Synthesizer is a tool for supercollider that can be used t
 1. Be sure you have correctly installed the software specified in Prerequisites.
 2. Open SuperCollider, go to file tab and select 'Open User Support Directory'
 3. Make a folder called Extensions in this directory if it does not already exist
-4. Copy the BellExtensions files to this folder
+4. Put BellExtensions files and HelpSource folder to Extensions
 5. Inside of SuperCollider open the language tab, be sure interpreeter is booted and select 'Recompile Class Library'
 6. Once installed, Example File.scd can be used test install. 
     
+## Getting Started
+
+The FM Bell Synthesizer utilizes a series of advance spatial techniques transform interpolating clusters of fm spectral familes
+
+Example File contains some basic examples of sounds that can be produced. To create sounds, uncomment one of the following fuctions and run code.
+
+// playInitSound.value();
+// playFinalSound.value();
+// playSound.value();
+
+Output will be generated on the desktop as a wave file called called testCTK
+
+For information on individual methods and arguments. A Bell Texture help file can be found in the Help browser
+
 ## Built With
 
 * [SuperCollider 3.8.0](http://www.dropwizard.io/1.0.2/docs/) - Audio synthesis platform 
@@ -31,13 +45,13 @@ The Ambisonic FM Bell Synthesizer is a tool for supercollider that can be used t
 * [Concise explanation of Ambisonics](http://www.asoundeffect.com/ambisonics-primer/)
 * [Introduction to Ambisonic Workflow](http://www.ambisonictoolkit.net/documentation/workflow/)
 * [ATK SuperCollider Documentation](http://www.ambisonictoolkit.net/documentation/supercollider/)
+* [Video demonstation of BellTexture](https://www.youtube.com/playlist?list=PL2y-mQQ-qX1Vh9s9Oa7cxzyVMRNHIYBb2)
 * [3D Sound Spatialization Using Ambisonic Techniques](http://www.samdrazin.com/classes/mmi505/3-d_sound_spatialization_using_ambisonic_techniques.pdf)
     * Article on ambisonic theory and spatial processing techniques
 * [Basic overview of FM Synthesis](http://synthesizeracademy.com/fm-synthesis/)
     * A primer on FM synthesis
 * [Dodge and Jerse](https://books.google.com/books?id=eY_BQgAACAAJ&hl=en)
     *Excellent book on computer music and composition. Section 5.1 contains an in depth look at FM theory and application
-
 
 ## Author
 
