@@ -1,0 +1,267 @@
+TITLE:: BellTexture
+summary:: Interpolating Spatial FM Bell Texture
+categories:: Extensions
+
+DESCRIPTION::
+A BellTexture encodes and transforms a series of interpolating FM spectral siblings to create a rich bell-like texture. It was created in collaboration with the UW Digital Arts Department as a compositional instrument, and example code to showcase a variety of ambisonic techniques.
+
+CLASSMETHODS::
+
+METHOD:: new
+Creates new instance of BellTexture
+
+NOTE: score and sampleRate MUST be specfied,
+
+ARGUMENT:: score
+Ctk score BellTexture will write to
+
+ARGUMENT:: pRatios
+Specified ratios BellTexture can use to generate families (Risset bell ratios used as default)
+
+ARGUMENT:: sampleRate
+SampleRate of given score
+
+returns:: A BellTexture
+
+INSTANCEMETHODS::
+
+METHOD:: changeKernels
+Selects encoder and decoder for BellTexture
+
+NOTE: Encoder MUST be a kernel, also input score and sample rate arguments are required
+
+ARGUMENT:: encoder
+Specifies encoder kernel, output is mixed with FoaEncoderMatrix.newAtoB output
+
+Default value = FoaEncoderKernel.newDiffuse(sampleRate: sampleRate, score: score)
+
+ARGUMENT:: decoder
+Specifies decoder
+
+Default value = FoaDecoderKernel.newUHJ(sampleRate: sampleRate, score: score)
+
+ARGUMENT:: mix
+Defines mix A to B encoder signal and encoderKernel signal. Range (0, 1): 0 = only A to B output, 1 = only encoder output
+
+METHOD:: generateSequence
+Generates sequence of note calls that interpolate between semi-random spectral siblings
+
+ARGUMENT:: start
+Starttime of sequence
+
+ARGUMENT:: dur
+Duration of sequence
+
+ARGUMENT:: sFreq
+Fundamental frequency of sequence
+
+ARGUMENT:: numNotes
+Number of note calls in sequence
+
+ARGUMENT:: sGain
+Gain of sequence (dB)
+
+ARGUMENT:: sCutoff
+Approximate highest frequency present in the spectrum of sequence
+
+ARGUMENT:: sLPFreq
+Cutoff frequency of Low Pass Filter in sequence
+
+METHOD:: randFamily
+Calculates a random spectral family from BellTexture's current ratios. New family always > 1
+
+METHOD:: changeSpace
+Changes values to multiple spatial parameters.
+
+NOTE: All modulation implemented with interpolating random noise
+
+ARGUMENT:: push
+Distortion angle of push transform on X axis. pi/2 = front of X axis, -pi/2 = back of X axis.
+
+See FoaPush for more details
+
+ARGUMENT:: hilbert
+Mix of phase rotation in signal (ambiguous to unambiguous modulation). 0 = off, 1 = on
+
+ARGUMENT:: rRates
+Rates of rotation around the Z, X, and Y axis. Takes following array as argument [rotationRate, tiltRate, turnRate]. Array values are frequencies.
+See FoaRTT for more details
+
+ARGUMENT:: rAmt
+Range of angles RTT will modulate between. Example if rAmt = pi RTT will modulate between (-pi, pi).
+
+ARGUMENT:: dist
+Distance of signal in meters. See FoaProximity for details.
+
+WARNING: Distance = 0 is an invalid value!
+
+ARGUMENT:: dRate
+Rate distance is modulated
+
+ARGUMENT:: dAmt
+Range distance modulates between. Specified as fraction of distance. Range from (0, 1).
+
+WARNING: 0 and 1 are both invalid values
+
+Example: if distance = 10 and dAmt = 0.9, range = (1, 19).
+
+ARGUMENT:: hP
+HighPass filter to counter bass boosting effects of proximity filter
+
+METHOD:: changeMod
+Changes modulation parameters of individual A-Format signals.
+
+NOTE: Modulation happens prior to encoding. All modulation implemented with interpolating random noise
+
+ARGUMENT:: chorus
+Low frequency pitch modulation amount. Range = (-chorus, chorus)
+
+ARGUMENT:: phase
+Low frequency phase modulation amount. Range = (-phase, phase)
+
+ARGUMENT:: dev
+Low frequency cutoff modulation amount. Specified as fraction of cutoff with range (0, 1)
+
+ARGUMENT:: lp
+Low frequency LPFilter modulation amount. Specified as fraction of lPFreq with range (0, 1)
+
+METHOD:: selectFamily
+Selects family either using BellTexture's current partial ratios, or another specified family ratio. PVals are used to select family if value is specified. Else, ratio is used
+
+ARGUMENT:: pVals
+Array of 2 partial indexes to be converted to family.
+If either partial specified is > than BellTexture's current pRatio size or if partial < 0, pVals rounded to either the highest or lowest value
+
+ARGUMENT:: ratio
+FM family ratio. Used if pVals are not specified
+
+ARGUMENT:: viewRatios
+Boolean value. If true posts current ratios with partial numbers and family member selected in post window
+
+METHOD:: selectSynth
+Selects synth to be used by BellTexture
+
+ARGUMENT:: synthType
+Takes symbol as argument. Two options:
+
+        \Omni --> 1 oscs running through newOmni encoder
+
+        \AB --> 4 oscs running through A to B encoder
+
+EXAMPLES::
+
+code::
+(
+var score;
+
+// vars for NRT output
+var	outputPath, headerFormat, sampleFormat, numOutputChannels;
+
+var synth;
+
+var start, dur, phase, freq, numNotes, gain, cut, lp, sampleRate;
+var chorusMod, phaseMod, devMod, lpMod;
+var push, hilbert, rRates, rAmt, dist, dRate, dModAmt, hP;
+var calcVals;
+var theseVals;
+var encoderMix;
+var playInitSound, playFinalSound, playSound;
+var encoder, decoder;
+
+//////////////////
+// SCORE SET-UP
+//////////////////
+
+// set the NRT vars here...
+outputPath = "~/Desktop/testCTK.wav"; // output file path
+headerFormat = "WAV";                 // soundfile header format
+sampleFormat = "int24";               // soundfile sample format
+sampleRate = s.sampleRate;
+numOutputChannels = 2;
+
+// create a score
+score = CtkScore.new;
+
+
+// sequence vars
+start      = 0;
+dur        = 10;
+phase      = 0;
+freq       = 440/4;
+numNotes   = 2;
+gain       = -15;
+cut        = 3000;
+lp         = 2000;
+
+// instance of BellTexture
+~bell = BellTexture(score, sampleRate: sampleRate);
+
+// Plays instance of 1 carrier running through omni encoder
+playInitSound = {
+// Creates bell texture
+	~bell.selectSynth(\Omni);
+	~bell.generateSequence(start, dur, freq, numNotes, gain, cut, lp);
+};
+
+// Plays instance of modulating A to B format signal with multiple modulating transforms
+playFinalSound = {
+	// Creates bell texture
+	~bell = BellTexture(score, sampleRate: sampleRate);
+	~bell.selectSynth(\AB);
+	~bell.changeMod(0.5, pi, 1, 1);
+	~bell.changeSpace(pi/4, 1, [0.3, 0.4, 0.35], 2pi, 2, 0.6, 0.9);
+	~bell.generateSequence(start, dur, freq, numNotes, gain, cut, lp);
+
+};
+
+// Plays instance of raw A to B format signal
+playSound = {
+	// Creates bell texture
+	~bell = BellTexture(score, sampleRate: sampleRate);
+	~bell.selectSynth(\AB);
+	~bell.changeKernels(
+		FoaEncoderKernel.newDiffuse(sampleRate: sampleRate, score: score),
+		FoaDecoderKernel.newUHJ(sampleRate: sampleRate, score: score),
+		mix: 0);
+	~bell.changeMod(0, 0, 0, 0);
+	~bell.changeSpace(0, 0, [0, 0, 0], 0, 2, 0.3, 0);
+	~bell.generateSequence(start, dur, freq, numNotes, gain, cut, lp);
+};
+
+
+//////////////////
+// SCORE
+//////////////////
+
+// playInitSound.value();
+// playFinalSound.value();
+// playSound.value();
+
+
+
+score.write(
+	outputPath.standardizePath,
+	sampleRate: sampleRate,
+	headerFormat: headerFormat,
+	sampleFormat: sampleFormat,
+	options: ServerOptions.new.numOutputBusChannels_(numOutputChannels)
+);
+)
+SFPlayer("~/Desktop/testCTK.wav".standardizePath).gui;
+
+/*
+
+James Wenlock
+DXARTS, University of Washington, 2016
+
+*/
+::
+</pre>
+<div class='doclink'>link::Classes/BellTexture::<br>sc version: 3.8.0</div></div></body></html>
+
+/*
+
+James Wenlock
+DXARTS, University of Washington, 2016
+
+*/
