@@ -14,7 +14,7 @@ The Ambisonic FM Bell Synthesizer is a tool for supercollider that can be used t
 1. Be sure you have correctly installed the software specified in Prerequisites.
 2. Open SuperCollider, go to file tab and select 'Open User Support Directory'
 3. Make a folder called Extensions in this directory if it does not already exist
-4. Put BellExtensions files and HelpSource folder to Extensions
+4. Put BellExtensions files and HelpSource folder into Extensions
 5. Inside of SuperCollider open the language tab, be sure interpreeter is booted and select 'Recompile Class Library'
 6. Once installed, Example File.scd can be used test install. 
     
