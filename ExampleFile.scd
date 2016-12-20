@@ -84,8 +84,7 @@ playSound = {
 // playFinalSound.value();
 // playSound.value();
 
-
-
+// Writes score to specified output path
 score.write(
 	outputPath.standardizePath,
 	sampleRate: sampleRate,
