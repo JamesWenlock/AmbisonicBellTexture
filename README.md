@@ -53,7 +53,7 @@ For information on individual methods and arguments the Bell Texture help file c
 * [Basic overview of FM Synthesis](http://synthesizeracademy.com/fm-synthesis/)
     * A primer on FM synthesis
 * [Dodge and Jerse](https://books.google.com/books?id=eY_BQgAACAAJ&hl=en)
-    *Excellent book on computer music and composition. Section 5.1 contains an in depth look at FM theory and application
+    * Excellent book on computer music and composition. Section 5.1 contains an in depth look at FM theory and application
 
 ## Author
 
