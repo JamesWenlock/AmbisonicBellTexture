@@ -8,29 +8,30 @@ BellTexture {
 	var bellVals;
 	var encoderKernel, encodeAmt, decoderKernel, decodeMix;
 	var output;
+	var max, min;
+	var thisServer, sampleRate;
 
-    *new {arg score, pRatios = [0.56, 0.92, 1.19, 1.7, 2.0, 2.74, 3.0, 3.76, 4.07], gFamily = 1.8461538461538, sampleRate;
-		^super.new.init(score, pRatios, gFamily, sampleRate);
+    *new {arg score, pRatios = [0.56, 0.92, 1.19, 1.7, 2.0, 2.74, 3.0, 3.76, 4.07], sampleRate;
+		^super.new.init(score, pRatios, sampleRate);
     }
 
-    init {arg thisScore, thisPRatios, gFamily, sampleRate;
-		var max = 8, min = 1;
-
-		family = gFamily;
+	init {arg thisScore, thisPRatios, thisSampleRate;
+		sampleRate = thisSampleRate;
+		max = thisPRatios.size;
+		min = 1;
+		thisServer = Server.default;  // hopefully this will actually be the server that is in use... for NRT, maybe not???
 		decodeMix = 0;
 		score = thisScore;
 		pRatios = thisPRatios;
-		pVals = Array.fill(max - min, {arg i; i + min});
-		output = \bFormat;
+		family = pRatios[1] / pRatios[0];
+		pVals = Array.fill(max, {arg i; i + min});
 		synth = Dictionary.new;
 		this.changeMod;
 		this.changeSpace;
-		encoderKernel = FoaEncoderKernel.newDiffuse(sampleRate: sampleRate, score: score);
-		decoderKernel = FoaDecoderKernel.newUHJ(sampleRate: sampleRate, score: score);
-/*		this.changeKernels(
+		this.changeKernels(
 			FoaEncoderKernel.newDiffuse(sampleRate: sampleRate, score: score),
 			FoaDecoderKernel.newUHJ(sampleRate: sampleRate, score: score)
-		);*/
+		);
 		this.selectSynth;
 	}
 
@@ -41,18 +42,45 @@ BellTexture {
 		lPAmt= lp;
 	}
 
-	selectOutput {arg outputType = \bFormat;
-		if(outputType == \bFormat,{
-			decodeMix = 0;
-		}, {
-			decodeMix = 1;
-		}
-		);
-	}
-
-	selectSynth {arg synthType = \fmSynthSpatial;
+	selectSynth {arg synthType = \AB;
 		synthSymb = synthType;
 	}
+
+	selectFamily {arg pVals = [0, 0], ratio = 1.8461538461538, viewRatios = false;
+		if (viewRatios,
+			{
+				"-----------".postln;
+				"Ratios".postln;
+				pRatios.do({arg ratio, i; ("" ++ (i + 1) ++ " | " ++ ratio).postln;});
+				"".postln;
+			}
+		);
+		if ((pVals[1] == 0) && (pVals[0] == 0),
+			{family = ratio},
+			{
+				var checkPVals = {arg thesePVals;
+					thesePVals.do({arg pVal, i;
+						if (pVal < min,
+							{pVal = min}
+						);
+						if (pVal > max,
+							{pVal = max}
+						);
+						pVals[i] = pVal;
+					})
+				};
+
+				checkPVals.value(pVals);
+
+				family = pRatios[pVals[0]] / pRatios[pVals[1]];
+				"Family".postln;
+				[pRatios[pVals[0]], pRatios[pVals[1]]].postln;
+				"-----------".postln;
+
+			}
+		)
+	}
+
 
 	randFamily {
 		var ratios = [0, 0];
@@ -80,13 +108,13 @@ BellTexture {
 		proxHP = hP;
 	}
 
-	generateSequence {arg start = 0, dur = 20, gPhase = 0, gFreq = 440, numNotes = 7, gGain = -10, gCutoff = 4000, gLPFreq = 4000;
+	generateSequence {arg start = 0, dur = 20, sFreq = 440, numNotes = 7, sGain = -10, sCutoff = 4000, sLPFreq = 4000;
 		var starttime;
 
-		freq = gFreq;
-		gain = gGain;
-		cutoff = gCutoff;
-		lPFreq = gLPFreq;
+		freq = sFreq;
+		gain = sGain;
+		cutoff = sCutoff;
+		lPFreq = sLPFreq;
 
 		noteRis = 0.45;
 		noteDec = 0.45;
@@ -109,6 +137,7 @@ BellTexture {
 
 	}
 
+	// Calculates A-Format params
 	bellCalcs {arg thisCutoff, thisFreq, family, lPFreq;
 	var freqVals;
 
@@ -132,15 +161,13 @@ BellTexture {
 	};
 
 	var randPVals = calcPVals.value();
-	randPVals.postln;
-	"init calc vals success!!".postln;
+
+
 	freqVals = Array.fill(4,
 		{arg i; var cm, carFreq, modFreq, dev, phaseRate, chorusRate, devMod, devRate, lPRate, lPMod, pVals;
 			cm = CMRatio(family, randPVals[i]).returnCM;
-			cm.postln;
 			carFreq = thisFreq * cm[0];
 			modFreq =  thisFreq * cm[1];
-
 			dev = thisCutoff/thisFreq;
 			dev = dev - cm[0];
 			dev = dev / cm[1];
@@ -159,12 +186,13 @@ BellTexture {
 
 			[carFreq, modFreq, dev, phaseRate, chorusRate, devRate, devMod, lPMod, lPRate];
 	});
-	"bell calcs success!!".postln;
 	bellVals = freqVals.flop;
 	}
 
-		// Plays fm bell
+	// Plays fm bell
 	playBell {arg nStart, nDur, nRis, nDec;
+		"playing".postln;
+		    freq.postln;
 		    this.bellCalcs(cutoff, freq, family, lPFreq);
 		    bellVals.postln;
 			// Adds bell sound to score
@@ -184,14 +212,13 @@ BellTexture {
 				.devMod_(bellVals[6])
 				.lPMod_(bellVals[7])
 				.lPRate_(bellVals[8])
-			.modAmt_(modAmt)
 			);
 		}
 
 	// Initializes synths with given fields
 	initSynths {
-		synth.put(\fmSynthSpatial, CtkSynthDef.new(\fmSpatSynthD,
-			{arg gain, ris, dec, dur, freq, lPFreq, modAmt,
+		synth.put(\AB, CtkSynthDef.new(\fmSpatSynthAB,
+			{arg gain, ris, dec, dur, freq, lPFreq,
 
 				// BELL CALCS //
 				carFreq   = #[0, 0, 0, 0], modFreq    = #[0, 0, 0, 0],  dev     = #[0, 0, 0, 0],
@@ -205,7 +232,7 @@ BellTexture {
 
 				// osc vars
 				var amp, car, mod, bellVals, chorMul, phaseMul, thisLPFreq, newLFMod, hilbert;  // added by JA
-				var phase;
+
 				// spatial vars
 				var encoder = FoaEncoderMatrix.newAtoB;
 				var rTTVals;
@@ -214,37 +241,31 @@ BellTexture {
 				var bSig, dSig;
 				var delayComp;
 
-				var s;  // a hack added by JA... not good... remove!!
-
-				//s is default server, class may need server q`
-				s = Server.default;  // hopefully this will actually be the server that is in use... for NRT, maybe not???
-
-				delayComp = ((encoderKernel.kernelSize-1)/2 + encoderKernel.kernelSize - s.options.blockSize) / s.sampleRate;
+				// calculates delay compensation
+				delayComp = ((encoderKernel.kernelSize-1)/2 + encoderKernel.kernelSize - thisServer.options.blockSize) / thisServer.sampleRate;
 
 				// converts amps to db
 				amp = gain.dbamp;
 
-				//Adds envelopes to dictionary
+				// creates env
 				env = EnvGen.kr(
 					Env([0, 1, 1, 0], [ris, 1.0 - (ris + dec), dec], curve: [0, 0, 0]),
 					levelScale: amp, timeScale: dur
 				);
 
-				phase = 0;
-				phaseMul = pi;
 
 				// creates fm oscs
 				mod = SinOsc.ar(
 					modFreq + LFNoise2.kr(chorusRate, chorAmt),
-					phase + LFNoise2.kr(phaseRate, phaseMul * phaseAmt),
+					LFNoise2.kr(phaseRate, phaseAmt),
 					dev + LFNoise2.kr(devRate, devMod * devAmt)
 				);
-
 				car = SinOsc.ar(carFreq + mod, 0, env);
 
+				// adds LP Filter
 				car = LPF.ar(car, lPFreq + LFNoise2.kr(lPRate, lPMod * lPAmt));
 
-				// spatialial transforms
+				// spatialial encoding
 				 sigA = FoaEncode.ar(car, encoder);
 				 sigS = FoaEncode.ar(sigA[0], encoderKernel);
 				 sigA = DelayC.ar(sigA, delayComp, delayComp);
@@ -254,37 +275,32 @@ BellTexture {
 				// push
 				sig = FoaPush.ar(sig, pushAmt);
 
-				//phase rotation
+				// phase rotation
 				newLFMod = LFNoise2.kr([0.2]!4, 2pi);  // does expand!!
-
 				hilbert = sig;
-				// hilbert = FoaPanB.ar(SinOsc.ar(440.0, mul: -6.dbamp));  // this is a simple test!!
-
 				// better... more SC
 				hilbert.collectInPlace({arg item, i;
 					item = (Hilbert.ar(item) * [newLFMod[i].cos, newLFMod[i].sin]).sum;
 				});
-
-				//sig = ((1.0 - hilbertAmt).sqrt + sig) + (hilbertAmt.sqrt * hilbert);  // equal power
 				sig = (sig * (1.0 - hilbertAmt)) + (hilbertAmt * hilbert);
 
+				// rotatation
 				rTTVals  = LFNoise2.ar(rTTRates, rTTAmt);
 				sig = FoaRTT.ar(sig, rTTVals[0], rTTVals[1], rTTVals[2]);
-				// rtt = LFNoise2.kr(rTTRates, rTTAmt);
-				// sig = FoaRTT.ar(sig, rtt.at(0), rtt.at(1), rtt.at(2));
 
-				//proximity
+				// proximity
 				sig = HPF.ar(sig, proxHP);
 				sig = FoaProximity.ar(sig, distance + LFNoise2.kr(distRate, distance * distAmt));
 
+				// decodes sig
 				sig = FoaDecode.ar(sig, decoderKernel);
 
 				Out.ar(0, sig);
 			}
 		));
 
-		synth.put(\fmSynthBasic, CtkSynthDef.new(\fmSpatSynthBoring,
-			{arg gain, ris, dec, dur, freq, lPFreq, modAmt,
+	synth.put(\Omni, CtkSynthDef.new(\fmSpatSynthO,
+			{arg gain, ris, dec, dur, freq, lPFreq,
 
 				// BELL CALCS //
 				carFreq   = #[0, 0, 0, 0], modFreq    = #[0, 0, 0, 0],  dev     = #[0, 0, 0, 0],
@@ -298,34 +314,65 @@ BellTexture {
 
 				// osc vars
 				var amp, car, mod, bellVals, chorMul, phaseMul, thisLPFreq, newLFMod, hilbert;  // added by JA
-				var phase;
+
 				// spatial vars
 				var encoder = FoaEncoderMatrix.newOmni;
+				var rTTVals;
 				var sig;
+				var sigO, sigS;
+				var bSig, dSig;
+				var delayComp;
+
+				// calculates delay compensation
+				delayComp = ((encoderKernel.kernelSize-1)/2 + encoderKernel.kernelSize - thisServer.options.blockSize) / thisServer.sampleRate;
 
 				// converts amps to db
 				amp = gain.dbamp;
 
-				//Adds envelopes to dictionary
-				env.add(\vol -> EnvGen.kr(
+				// creates env
+				env = EnvGen.kr(
 					Env([0, 1, 1, 0], [ris, 1.0 - (ris + dec), dec], curve: [0, 0, 0]),
-					levelScale: amp, timeScale: dur));
-
-				phase = 0;
-				phaseMul = pi;
+					levelScale: amp, timeScale: dur
+				);
 
 				// creates fm oscs
 				mod = SinOsc.ar(
-					modFreq,
-					phase,
-					dev
+					modFreq + LFNoise2.kr(chorusRate, chorAmt),
+					LFNoise2.kr(phaseRate, phaseAmt),
+					dev + LFNoise2.kr(devRate, devMod * devAmt)
 				);
+				car = SinOsc.ar(carFreq + mod, 0, env);
 
-				car = SinOsc.ar(carFreq + mod, 0, env[\vol]);
+				// adds LP Filter
+				car = LPF.ar(car, lPFreq + LFNoise2.kr(lPRate, lPMod * lPAmt));
 
-				// spatialial transforms
-				sig = FoaEncode.ar(car[0], encoder);
+				// spatialial encoding
+				 sigO = FoaEncode.ar(car[0], encoder);
+				 sigS = FoaEncode.ar(car[0], encoderKernel);
+				 sigO = DelayC.ar(sigO, delayComp, delayComp);
+				sig = (sigO * (1.0 - encodeAmt)) + (encodeAmt * sigS);
 
+				// push
+				sig = FoaPush.ar(sig, pushAmt);
+
+				// phase rotation
+				newLFMod = LFNoise2.kr([0.2]!4, 2pi);  // does expand!!
+				hilbert = sig;
+				// better... more SC
+				hilbert.collectInPlace({arg item, i;
+					item = (Hilbert.ar(item) * [newLFMod[i].cos, newLFMod[i].sin]).sum;
+				});
+				sig = (sig * (1.0 - hilbertAmt)) + (hilbertAmt * hilbert);
+
+				// rotatation
+				rTTVals  = LFNoise2.ar(rTTRates, rTTAmt);
+				sig = FoaRTT.ar(sig, rTTVals[0], rTTVals[1], rTTVals[2]);
+
+				// proximity
+				sig = HPF.ar(sig, proxHP);
+				sig = FoaProximity.ar(sig, distance + LFNoise2.kr(distRate, distance * distAmt));
+
+				// decodes sig
 				sig = FoaDecode.ar(sig, decoderKernel);
 
 				Out.ar(0, sig);
@@ -334,3 +381,10 @@ BellTexture {
 
 	}
 }
+
+/*
+
+James Wenlock
+DXARTS, University of Washington, 2016
+
+*/
