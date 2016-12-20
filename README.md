@@ -25,7 +25,9 @@ The FM Bell Synthesizer utilizes a series of advance spatial techniques transfor
 Example File contains some basic examples of sounds that can be produced. To create sounds, uncomment one of the following fuctions and run code.
 
 // playInitSound.value();
+
 // playFinalSound.value();
+
 // playSound.value();
 
 Output will be generated on the desktop as a wave file called called testCTK
