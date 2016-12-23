@@ -49,16 +49,21 @@ For information on individual methods and arguments the Bell Texture help file c
 * Dodge, Charles, and Jerse, Thomas A. Computer Music : Synthesis, Composition, and Performance. 2nd ed. New York : London: Schirmer Books ; Prentice Hall International, 1997.
    * Excellent book on computer music and composition. See Section 5.1 for an in depth look at FM theory and application. 
    
+   
 * “Introduction - the Ambisonic Toolkit Workflow.” 2016. http://www.ambisonictoolkit.net/documentation/workflow/.
    * Introduction and visual representation of ambisonic workflow. A good place to start if you've never worked with ambisonics before.  
+   
 * Leonard, John. “Welcome to the Wonderful World of Ambisonics - a Primer” January 7, 2016. http://www.asoundeffect.com/ambisonics-primer/.
    * Article providing description, history, and potential applications of ambisonics.
+
 
 * Malham, David G., and Anthony Myatt. "3-D Sound Spatialization Using Ambisonic Techniques." Computer Music Journal 19, no. 4 (1995): 58-70
    * In depth article on ambisonic theory and spatial processing techniques
 
+
 * Schottstaedt, Bill. “An Introduction to FM.” https://ccrma.stanford.edu/software/snd/snd/fm.html.
    * Introduction to FM Sythesis. Provides description on what FM synthesis is, methods to control and manipulate spectra, and examples of FM instruments
+
 
 ## Author
 
@@ -70,7 +75,7 @@ This project is licensed under the Apache License - see the [LICENSE.md](LICENSE
 
 ## Acknowledgments
 
-* This project would not have been possible without the guidence, generosity and support  University of Washington [Center for Digital Arts and Experimental Media](https://dxarts.washington.edu/).
+* This project would not have been possible without the guidence, generosity and support from the University of Washington's [Center for Digital Arts and Experimental Media](https://dxarts.washington.edu/).
 * I would like to personally thank
     * **Dr.Joseph Anderson** for taking me on this quater. Acting as my mentor this quater, he taught me everything I know now about ambisonics, as well as a bunch of other things! He's absolutely brilliant and I'm so grateful for all the time, flexibility, resources and expertise. This project would not have happened without him!
     * **Dan Peterson** for all the help! He's debugged my code, helped me develope new techniques, as well as be a fantastic teacher throughout my sonic studies. This project would not have happened without him!
