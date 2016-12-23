@@ -70,8 +70,8 @@ For information on individual methods and arguments, the Bell Texture help file 
 
 ## License
 
-    This softwere is licensed under the GNU General Public License
-    See the [LICENSE.md](LICENSE.md) file for details
+* This softwere is licensed under the GNU General Public License
+* See the [LICENSE.md](LICENSE.md) file for details
 
 ## Acknowledgments
 
