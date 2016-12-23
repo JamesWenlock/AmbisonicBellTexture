@@ -32,7 +32,7 @@ Example File contains some basic examples of sounds that can be produced. To cre
 
 Output will be generated on the desktop as a wave file called called testCTK
 
-For information on individual methods and arguments the Bell Texture help file can be found in the Help browser
+For information on individual methods and arguments, the Bell Texture help file can be found in the Help browser
 
 ## Built With
 
