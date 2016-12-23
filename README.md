@@ -61,7 +61,7 @@ For information on individual methods and arguments, the Bell Texture help file 
 
 
 * Schottstaedt, Bill. “An Introduction to FM.” https://ccrma.stanford.edu/software/snd/snd/fm.html.
-   * Introduction to FM Sythesis. Provides description on what FM synthesis is, methods to control and manipulate spectra, and examples of FM instruments
+   * Introduction to FM Sythesis. States what FM synthesis is, methods to control and manipulate spectra, and examples of FM instruments
 
 
 ## Author
