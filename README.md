@@ -1,6 +1,6 @@
 # Ambisonic FM BELL SYNTHESIZER
 
-The Ambisonic FM Bell Synthesizer is a tool for supercollider that can be used to generate a variety of  bell-like textures in ambisonics. It was created in collaboration with the UW Digital Arts Department as a compositional instrument, and as example code to showcase a variety of ambisonic techniques.
+The Ambisonic FM Bell Synthesizer is a tool for supercollider that can be used to generate a variety of  bell-like textures in ambisonics. It was created in collaboration with the University of Washington [Center for Digital Arts and Experimental Media](https://dxarts.washington.edu/) as a compositional instrument, and as example code to showcase a variety of ambisonic techniques.
 
 
 ### Prerequisites   
@@ -36,24 +36,38 @@ For information on individual methods and arguments the Bell Texture help file c
 
 ## Built With
 
-* [SuperCollider 3.8.0](http://www.dropwizard.io/1.0.2/docs/) - Audio synthesis platform 
-* [SuperCollider 3.8.0](http://www.dropwizard.io/1.0.2/docs/) - Audio synthesis platform 
-* [SuperCollider 3.8.0](http://www.dropwizard.io/1.0.2/docs/) - Audio synthesis platform 
+* [SuperCollider 3.8.0](http://supercollider.github.io/download) - Audio synthesis platform 
 * [Ambisonic Toolkit](http://www.ambisonictoolkit.net/) - Tools to convert and manipulate audio in 3D space
 * [Composer's Toolkit](https://github.com/supercollider-quarks/Ctk) - Used to sequence and render audio
 
 ## Resources 
 
-* [Concise explanation of Ambisonics](http://www.asoundeffect.com/ambisonics-primer/)
-* [Introduction to Ambisonic Workflow](http://www.ambisonictoolkit.net/documentation/workflow/)
-* [ATK SuperCollider Documentation](http://www.ambisonictoolkit.net/documentation/supercollider/)
-* [Video demonstation of BellTexture](https://www.youtube.com/playlist?list=PL2y-mQQ-qX1Vh9s9Oa7cxzyVMRNHIYBb2)
-* [3D Sound Spatialization Using Ambisonic Techniques](http://www.samdrazin.com/classes/mmi505/3-d_sound_spatialization_using_ambisonic_techniques.pdf)
-    * Article on ambisonic theory and spatial processing techniques
-* [Basic overview of FM Synthesis](http://synthesizeracademy.com/fm-synthesis/)
-    * A primer on FM synthesis
-* [Dodge and Jerse](https://books.google.com/books?id=eY_BQgAACAAJ&hl=en)
-    * Excellent book on computer music and composition. Section 5.1 contains an in depth look at FM theory and application
+“ATK SuperCollider Documentation.” 2016. http://www.ambisonictoolkit.net/documentation/supercollider/
+
+   Ambisonic toolkit documentation for SuperCollider
+
+Dodge, Charles, and Jerse, Thomas A. Computer Music : Synthesis, Composition, and Performance. 2nd ed. New York : London: Schirmer   
+   Books ; Prentice Hall International, 1997.
+   
+   Excellent book on computer music and composition. See Section 5.1 for an in depth look at FM theory and application. 
+   
+“Introduction - the Ambisonic Toolkit Workflow.” 2016. http://www.ambisonictoolkit.net/documentation/workflow/.
+
+   Introduction and visual representation of ambisonic workflow. A good place to start if you've never worked with ambisonics before.  
+
+Leonard, John. “Welcome to the Wonderful World of Ambisonics - a Primer” January 7, 2016. 
+   http://www.asoundeffect.com/ambisonics-primer/.
+   
+   Article providing description, history, and potential applications of ambisonics.
+
+Malham, David G., and Anthony Myatt. "3-D Sound Spatialization Using Ambisonic Techniques." Computer Music Journal 19, no. 4 (1995):   
+   58-70.
+   
+   In depth article on ambisonic theory and spatial processing techniques
+
+Schottstaedt, Bill. “An Introduction to FM.” https://ccrma.stanford.edu/software/snd/snd/fm.html.
+
+   Introduction to FM Sythesis. Provides description on what FM synthesis is, methods to control and manipulate spectra, and examples of FM instruments
 
 ## Author
 
@@ -65,7 +79,7 @@ This project is licensed under the Apache License - see the [LICENSE.md](LICENSE
 
 ## Acknowledgments
 
-* This project would not have been possible without the guidence, generosity and support University of Washington's Digital Arts deparment.
+* This project would not have been possible without the guidence, generosity and support  University of Washington [Center for Digital Arts and Experimental Media](https://dxarts.washington.edu/).
 * I would like to personally thank
     * **Dr.Joseph Anderson** for taking me on this quater. Acting as my mentor this quater, he taught me everything I know now about ambisonics, as well as a bunch of other things! He's absolutely brilliant and I'm so grateful for all the time, flexibility, resources and expertise. This project would not have happened without him!
     * **Dan Peterson** for all the help! He's debugged my code, helped me develope new techniques, as well as be a fantastic teacher throughout my sonic studies. This project would not have happened without him!
