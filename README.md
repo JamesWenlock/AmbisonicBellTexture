@@ -1,6 +1,6 @@
-# Ambisonic FM BELL SYNTHESIZER
+# Ambisonic FM Bell Texture
 
-The Ambisonic FM Bell Synthesizer is a tool for supercollider that can be used to generate a variety of  bell-like textures in ambisonics. It was created in collaboration with the University of Washington [Center for Digital Arts and Experimental Media](https://dxarts.washington.edu/) as a compositional instrument, and as example code to showcase a variety of ambisonic techniques.
+The Ambisonic FM Bell Texture is a tool for supercollider that can be used to generate a variety of  bell-like textures in ambisonics. It was created in collaboration with the University of Washington [Center for Digital Arts and Experimental Media](https://dxarts.washington.edu/) as a compositional instrument, and as example code to showcase a variety of ambisonic techniques.
 
 
 ### Prerequisites   
