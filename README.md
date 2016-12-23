@@ -4,7 +4,7 @@ The Ambisonic FM Bell Texture is a tool for supercollider that can be used to ge
 
 
 ### Prerequisites   
-* the [Ambsionic Toolkit](http://www.ambisonictoolkit.net/download/supercollider/) with [kernels](http://www.ambisonictoolkit.net/download/kernels/)
+* The [Ambsionic Toolkit](http://www.ambisonictoolkit.net/download/supercollider/) with [kernels](http://www.ambisonictoolkit.net/download/kernels/)
 * [SuperCollider 3.8.0](http://supercollider.github.io/download.html)
 * [Composer's Toolkit](https://github.com/supercollider-quarks/Ctk) can be installed using Quarks gui inside super collider
     *  Here's some more information on quarks and how to use them --> [Quarks Help](http://doc.sccode.org/Guides/UsingQuarks.html)
