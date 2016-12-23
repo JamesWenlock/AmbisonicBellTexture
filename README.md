@@ -42,9 +42,8 @@ For information on individual methods and arguments the Bell Texture help file c
 
 ## Resources 
 
-“ATK SuperCollider Documentation.” 2016. http://www.ambisonictoolkit.net/documentation/supercollider/
-
-   Ambisonic toolkit documentation for SuperCollider
+* “ATK SuperCollider Documentation.” 2016. http://www.ambisonictoolkit.net/documentation/supercollider/
+   * Ambisonic toolkit documentation for SuperCollider
 
 * Dodge, Charles, and Jerse, Thomas A. Computer Music : Synthesis, Composition, and Performance. 2nd ed. New York : London: Schirmer Books ; Prentice Hall International, 1997.
    * Excellent book on computer music and composition. See Section 5.1 for an in depth look at FM theory and application. 
